@@ -219,3 +219,62 @@ flowchart LR
     
     Overall --> Grade
 ```
+
+
+| Score Range | Grade | Meaning |
+|------------|-------|---------|
+| 90–100 | A  | Excellent – Recruiter-ready |
+| 80–89 | B  | Very Good – Minor improvements |
+| 70–79 | C  | Good – Several areas to improve |
+| 60–69 | D  | Fair – Significant work needed |
+| 0–59 | F  | Needs complete overhaul |
+
+
+## User Interaction Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant GitHub
+    
+    User->>Frontend: Enter GitHub Username
+    Frontend->>Backend: Send username for analysis
+    Backend->>GitHub: Fetch profile data
+    GitHub-->>Backend: Return user & repo data
+    Backend->>Backend: Analyze repositories
+    Backend->>Backend: Calculate scores
+    Backend->>Backend: Generate insights
+    Backend-->>Frontend: Return complete analysis
+    Frontend->>User: Display dashboard with results
+```
+
+## Technology Stack
+
+``` mermaid
+graph TD
+    subgraph Frontend
+        React[React.js] 
+        ChartJS[Chart.js for Graphs]
+        CSS[CSS3 for Styling]
+    end
+    
+    subgraph Backend
+        FastAPI[FastAPI Framework]
+        Python[Python 3.11]
+    end
+    
+    subgraph External
+        GitHubAPI[GitHub REST API]
+    end
+    
+    subgraph DevOps
+        Docker[Docker Container]
+    end
+    
+    Frontend <--> Backend
+    Backend <--> GitHubAPI
+    Docker --> Frontend
+    Docker --> Backend
+```
