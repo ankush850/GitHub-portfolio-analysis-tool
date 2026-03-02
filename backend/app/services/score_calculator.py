@@ -170,12 +170,14 @@ class ScoreCalculator:
     def _get_grade(self, score: float) -> str:
         """Convert score to letter grade"""
         if score >= 90:
-            return "A"
+            return "A+"
         elif score >= 80:
-            return "B"
+            return "A"
         elif score >= 70:
-            return "C"
+            return "B"
         elif score >= 60:
+            return "C"
+        elif score >= 50:
             return "D"
         else:
             return "F"
