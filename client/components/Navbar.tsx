@@ -15,22 +15,16 @@ export default function Navbar() {
                 </Link>
 
                 <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-                    <Link href="/" className="flex items-center gap-2 hover:text-white transition-colors">
+                    <Link href="/how-it-works" className="flex items-center gap-2 hover:text-white transition-colors">
                         <Search className="w-4 h-4" /> How it Works
                     </Link>
-                    <Link href="/" className="flex items-center gap-2 hover:text-white transition-colors">
+                    <Link href="/#features" className="flex items-center gap-2 hover:text-white transition-colors">
                         <BarChart3 className="w-4 h-4" /> Examples
                     </Link>
-                    <Link href="/" className="flex items-center gap-2 hover:text-white transition-colors">
+                    <Link href="/contact" className="flex items-center gap-2 hover:text-white transition-colors">
                         <Mail className="w-4 h-4" /> Contact
                     </Link>
                 </nav>
-
-                <div className="flex items-center gap-4">
-                    <button className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">
-                        <LogIn className="w-4 h-4" /> Login
-                    </button>
-                </div>
             </div>
         </header>
     );

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'GitHub Portfolio Analyzer',
@@ -24,9 +25,9 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-slate-400 text-sm">
             <p>© 2026 GitHub Portfolio Analyzer</p>
             <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-blue-400 transition-colors">Terms</a>
-              <a href="#" className="hover:text-blue-400 transition-colors">Privacy</a>
-              <a href="#" className="hover:text-blue-400 transition-colors">Contact</a>
+              <Link href="/terms" className="hover:text-blue-400 transition-colors">Terms</Link>
+              <Link href="/privacy" className="hover:text-blue-400 transition-colors">Privacy</Link>
+              <Link href="/contact" className="hover:text-blue-400 transition-colors">Contact</Link>
             </div>
           </div>
         </footer>
