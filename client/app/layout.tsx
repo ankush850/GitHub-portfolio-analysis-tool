@@ -22,7 +22,7 @@ export default function RootLayout({
 
         <footer className="border-t border-slate-800 py-8 bg-slate-900/50 backdrop-blur">
           <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-slate-400 text-sm">
-            <p>© 2024 GitHub Portfolio Analyzer</p>
+            <p>© 2026 GitHub Portfolio Analyzer</p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <a href="#" className="hover:text-blue-400 transition-colors">Terms</a>
               <a href="#" className="hover:text-blue-400 transition-colors">Privacy</a>
