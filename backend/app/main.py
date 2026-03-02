@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from .api.routes import router
-from .config import Config
 
 app = FastAPI(
     title="GitHub Portfolio Analyzer",
@@ -10,18 +8,36 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configure CORS
+# -----------------------------
+# CORS CONFIGURATION (IMPORTANT)
+# -----------------------------
+# Allows:
+# - Local development
+# - Render deployed frontend
+# - Safe fallback during testing
+
+origins = [
+    "http://localhost:3000",
+    "https://github-portfolio-frontend.onrender.com",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include routers
+# -----------------------------
+# ROUTES
+# -----------------------------
 app.include_router(router, prefix="/api/v1")
 
+
+# -----------------------------
+# ROOT ENDPOINT
+# -----------------------------
 @app.get("/")
 async def root():
     return {
@@ -30,9 +46,16 @@ async def root():
         "endpoints": [
             "/api/v1/analyze/{username}",
             "/api/v1/health"
-        ]
+        ],
     }
 
+
+# -----------------------------
+# HEALTH CHECK
+# -----------------------------
 @app.get("/api/v1/health")
 async def health_check():
-    return {"status": "healthy", "service": "GitHub Portfolio Analyzer"}
+    return {
+        "status": "healthy",
+        "service": "GitHub Portfolio Analyzer"
+    }
