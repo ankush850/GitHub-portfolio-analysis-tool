@@ -3,7 +3,7 @@
 <div align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version 1.0.0">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License MIT">
-  <img src="https://img.shields.io/badge/hackathon-submission-orange.svg" alt="Hackathon Submission">
+ 
 </div>
 
 <br>
