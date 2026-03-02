@@ -24,7 +24,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="flex flex-col items-center text-center w-full max-w-4xl z-10 animate-slide-up">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium mb-8 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-          <Star className="w-4 h-4" /> Trusted by 10,000+ developers
+          <Star className="w-4 h-4" /> Trusted by 10 developers
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
@@ -59,7 +59,7 @@ export default function Home() {
       </section>
 
       {/* How it Works */}
-      <section className="w-full max-w-5xl z-10 flex flex-col items-center">
+      <section id="how-it-works" className="w-full max-w-5xl z-10 flex flex-col items-center">
         <h2 className="text-3xl font-bold mb-12 flex items-center gap-3">
           <LayoutDashboard className="w-8 h-8 text-blue-400" /> How It Works
         </h2>
@@ -81,7 +81,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="w-full max-w-5xl z-10 flex flex-col items-center">
+      <section id="features" className="w-full max-w-5xl z-10 flex flex-col items-center">
         <h2 className="text-3xl font-bold mb-12">⭐ Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
           {[

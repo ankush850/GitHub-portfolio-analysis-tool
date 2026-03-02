@@ -8,6 +8,8 @@ import {
     Github, Star, GitFork, ArrowLeft, Trophy, Calendar, FileText, Activity, Map, Loader2
 } from 'lucide-react';
 
+const dashboardCache: Record<string, any> = {};
+
 function DashboardContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -18,18 +20,73 @@ function DashboardContent() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        fetch(`http://localhost:8000/api/v1/analyze/${username}`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.detail) throw new Error(res.detail);
-                setData(res);
-                setLoading(false);
-            })
-            .catch(e => {
-                setError(e.message);
-                setLoading(false);
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
+    const [totalRepos, setTotalRepos] = useState(0);
+    const [isFetchingPage, setIsFetchingPage] = useState(false);
+    const [allRepos, setAllRepos] = useState<any[]>([]);
+
+    const loadBatch = async (page: number, currentRepos: any[]) => {
+        try {
+            if (page === 1) setLoading(true);
+            else setIsFetchingPage(true);
+
+            // Fetch the repository batch
+            const batchRes = await fetch(`http://localhost:8000/api/v1/analyze/batch/${username}?page=${page}&limit=20`);
+            const batchData = await batchRes.json();
+            if (batchData.detail) throw new Error(batchData.detail);
+
+            const combinedRepos = [...currentRepos, ...batchData.analyzed_repos];
+
+            // Calculate cumulative score with combined repositories
+            const scoreRes = await fetch(`http://localhost:8000/api/v1/analyze/score`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_data: batchData.user_data,
+                    repositories: combinedRepos
+                })
             });
+            const scoreData = await scoreRes.json();
+            if (scoreData.detail) throw new Error(scoreData.detail);
+
+            // Update state
+            setAllRepos(combinedRepos);
+            setHasMore(batchData.has_more);
+            setTotalRepos(batchData.total_repos);
+            setCurrentPage(batchData.page);
+
+            const newData = {
+                username,
+                user_data: batchData.user_data,
+                repositories: combinedRepos,
+                score: scoreData.score,
+                recruiter_feedback: scoreData.recruiter_feedback,
+                roadmap: scoreData.roadmap
+            };
+
+            dashboardCache[username] = newData;
+            setData(newData);
+
+        } catch (e: any) {
+            setError(e.message);
+        } finally {
+            if (page === 1) setLoading(false);
+            setIsFetchingPage(false);
+        }
+    };
+
+    useEffect(() => {
+        if (dashboardCache[username]) {
+            setData(dashboardCache[username]);
+            setAllRepos(dashboardCache[username].repositories);
+            setLoading(false);
+            return;
+        }
+
+        loadBatch(1, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [username]);
 
     if (loading) {
@@ -209,7 +266,7 @@ function DashboardContent() {
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                         <h3 className="text-lg font-bold flex items-center gap-2">
                             <FileText className="w-5 h-5 text-indigo-400" />
-                            Repositories Analysis <span className="text-slate-500 font-normal">({repos.length} analyzed)</span>
+                            Repositories Analysis <span className="text-slate-500 font-normal">({repos.length} of {totalRepos || repos.length} analyzed)</span>
                         </h3>
 
                         <div className="flex gap-2 w-full sm:w-auto">
@@ -232,7 +289,7 @@ function DashboardContent() {
                                 <div className="flex-grow">
                                     <div className="flex items-center gap-3 mb-2">
                                         <h4 className="text-lg text-blue-400 font-bold hover:underline cursor-pointer">
-                                            <Link href={`/repo/${repo.id}`}>{repo.name}</Link>
+                                            <Link href={`/repo/${repo.id}?user=${username}`}>{repo.name}</Link>
                                         </h4>
                                         <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
                                             Score: {repo.score} ({repo.grade})
@@ -269,6 +326,19 @@ function DashboardContent() {
                         ))}
                         {filteredRepos.length === 0 && (
                             <div className="text-center text-slate-500 p-8">No repositories match your search.</div>
+                        )}
+
+                        {hasMore && (
+                            <div className="mt-6 flex justify-center">
+                                <button
+                                    onClick={() => loadBatch(currentPage + 1, allRepos)}
+                                    disabled={isFetchingPage}
+                                    className="px-6 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 border border-slate-700 rounded-full text-slate-300 text-sm font-medium transition-colors flex items-center gap-2"
+                                >
+                                    {isFetchingPage ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                                    {isFetchingPage ? "Analyzing Next Batch..." : `Load More (${totalRepos - allRepos.length} remaining)`}
+                                </button>
+                            </div>
                         )}
                     </div>
                 </div>
