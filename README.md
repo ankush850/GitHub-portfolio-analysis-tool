@@ -348,20 +348,31 @@ To run both backend and frontend servers at the same time, you can use:
    ```bash
    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
    ```
-3. In the second terminal (from the `client` directory):
-   
+3. In the second terminal (from the `frontend` directory):
    ```bash
-   npm run dev
+   npm start
    ```
 
 #### Option 2: Using concurrently (if installed)
 If you have `concurrently` installed globally:
 ```bash
 npm install -g concurrently
-concurrently "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" "cd client && npm run dev"
+concurrently "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" "cd frontend && npm start"
 ```
 
-
+#### Option 3: Using a package.json script
+Add this to your root `package.json` (create one if it doesn't exist):
+```json
+{
+  "scripts": {
+    "dev": "concurrently \"cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload\" \"cd frontend && npm start\""
+  }
+}
+```
+Then run:
+```bash
+npm run dev
+```
 
 ### Backend Development
 ```bash
@@ -377,19 +388,19 @@ pytest
 ### Frontend Development
 ```bash
 # Start development server
-cd client
-npm install
+cd frontend
+npm start
 
 # Build for production
-cd client
-npm run dev
+cd frontend
+npm run build
 
 # Run tests (if available)
-cd client
+cd frontend
 npm test
 
 # Lint code
-cd client
+cd frontend
 npm run lint
 ```
 
