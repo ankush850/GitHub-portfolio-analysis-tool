@@ -45,7 +45,7 @@ https://drive.google.com/file/d/13ANO2Hzgun5eFPFOYru3UaUUbHFdY2Ry/view?usp=drive
 
 ```mermaid
 graph TB
-    subgraph "Frontend Layer"
+    subgraph "client Layer"
         UI[React Dashboard]
         Charts[Visualization Charts]
         Components[UI Components]
@@ -97,7 +97,7 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph "Frontend"
+    subgraph "client"
         A[React App]
         B[Dashboard]
         C[Score Visualization]
@@ -239,26 +239,26 @@ flowchart LR
 ```mermaid
 sequenceDiagram
     participant User
-    participant Frontend
+    participant client
     participant Backend
     participant GitHub
     
-    User->>Frontend: Enter GitHub Username
-    Frontend->>Backend: Send username for analysis
+    User->>client: Enter GitHub Username
+    client->>Backend: Send username for analysis
     Backend->>GitHub: Fetch profile data
     GitHub-->>Backend: Return user & repo data
     Backend->>Backend: Analyze repositories
     Backend->>Backend: Calculate scores
     Backend->>Backend: Generate insights
-    Backend-->>Frontend: Return complete analysis
-    Frontend->>User: Display dashboard with results
+    Backend-->>client: Return complete analysis
+    client->>User: Display dashboard with results
 ```
 
 ## Technology Stack
 
 ``` mermaid
 graph TD
-    subgraph Frontend
+    subgraph client
         React[React.js] 
         ChartJS[Chart.js for Graphs]
         CSS[CSS3 for Styling]
@@ -277,9 +277,9 @@ graph TD
         Docker[Docker Container]
     end
     
-    Frontend <--> Backend
+    client <--> Backend
     Backend <--> GitHubAPI
-    Docker --> Frontend
+    Docker --> client
     Docker --> Backend
 ```
 ## 📁 Project Structure
@@ -308,7 +308,7 @@ github-portfolio-analyzer/
 │   ├── .env                 # Backend environment variables
 │   ├── Dockerfile           # Backend Docker configuration
 │   └── requirements.txt     # Python dependencies
-├── frontend/                # React Frontend
+├── client/                # React client
 │   ├── public/              # Static files
 │   │   └── index.html       # Main HTML template
 │   ├── src/                 # Source code
@@ -328,8 +328,8 @@ github-portfolio-analyzer/
 │   │   │   └── App.css      # Main stylesheet
 │   │   ├── App.js           # Main React application component
 │   │   └── index.js         # React entry point
-│   ├── .env                 # Frontend environment variables
-│   ├── Dockerfile           # Frontend Docker configuration
+│   ├── .env                 # client environment variables
+│   ├── Dockerfile           # client Docker configuration
 │   ├── package.json         # Node.js dependencies and scripts
 │   └── package-lock.json    # Locked dependency versions
 ├── docker-compose.yml       # Docker Compose configuration
@@ -340,7 +340,7 @@ github-portfolio-analyzer/
 ## 🛠 Development Commands
 
 ### Running Both Services Simultaneously
-To run both backend and frontend servers at the same time, you can use:
+To run both backend and client servers at the same time, you can use:
 
 #### Option 1: Concurrent Terminals
 1. Open two separate terminal windows/tabs
@@ -348,7 +348,7 @@ To run both backend and frontend servers at the same time, you can use:
    ```bash
    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
    ```
-3. In the second terminal (from the `frontend` directory):
+3. In the second terminal (from the `client` directory):
    ```bash
    npm start
    ```
@@ -357,7 +357,7 @@ To run both backend and frontend servers at the same time, you can use:
 If you have `concurrently` installed globally:
 ```bash
 npm install -g concurrently
-concurrently "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" "cd frontend && npm start"
+concurrently "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" "cd client && npm start"
 ```
 
 #### Option 3: Using a package.json script
@@ -365,7 +365,7 @@ Add this to your root `package.json` (create one if it doesn't exist):
 ```json
 {
   "scripts": {
-    "dev": "concurrently \"cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload\" \"cd frontend && npm start\""
+    "dev": "concurrently \"cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload\" \"cd client && npm start\""
   }
 }
 ```
@@ -385,22 +385,22 @@ cd backend
 pytest
 ```
 
-### Frontend Development
+### client Development
 ```bash
 # Start development server
-cd frontend
+cd client
 npm start
 
 # Build for production
-cd frontend
+cd client
 npm run build
 
 # Run tests (if available)
-cd frontend
+cd client
 npm test
 
 # Lint code
-cd frontend
+cd client
 npm run lint
 ```
 
@@ -422,7 +422,7 @@ npm run lint
 
 2. **"Network error: Could not reach the server"**
    - Confirm backend server is running on port 8000
-   - Check that the frontend environment variable `REACT_APP_API_URL` points to the correct backend URL
+   - Check that the client environment variable `REACT_APP_API_URL` points to the correct backend URL
 
 3. **CORS Issues**
    - The backend is configured to allow requests from `http://localhost:3000`
@@ -441,7 +441,7 @@ netstat -ano | findstr :8000
 taskkill /PID <PID> /F
 ```
 
-### Frontend Server Not Starting
+### client Server Not Starting
 ```bash
 # Clear npm cache
 npm cache clean --force
@@ -450,3 +450,4 @@ npm cache clean --force
 rm -rf node_modules package-lock.json
 npm install
 ```
+
