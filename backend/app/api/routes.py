@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Dict, Any, List
 from pydantic import BaseModel
-import asyncio
+
 
 from ..services.github_service import GitHubService
 from ..services.analyzer_service import AnalyzerService
@@ -188,4 +188,5 @@ async def get_basic_profile(username: str):
         user_data = await github_service.get_user_profile(username)
         return user_data
     except Exception as e:
+
         raise HTTPException(status_code=500, detail=str(e))
